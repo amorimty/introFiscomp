@@ -1,0 +1,4 @@
+# Ignore Fortran compiled executables
+*.out
+*.exe
+/executables

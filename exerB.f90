@@ -1,8 +1,9 @@
 program exerB
 
     implicit none
+    real(8) :: dummie
 
-    expansaoTaylor(0.1_8)
+    dummie = expansaoTaylor(0.1_8)
 
 contains
     real(8) function expansaoTaylor(a)
