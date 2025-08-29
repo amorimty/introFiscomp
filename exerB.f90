@@ -1,12 +1,11 @@
 program exerB
 
     implicit none
-    real(8) :: dummie
 
-    dummie = expansaoTaylor(0.1_8)
+    write(*,*) expansaoTaylorErro(0.1_8)
 
 contains
-    real(8) function expansaoTaylor(a)
+    real(8) function expansaoTaylorErro(a)
         implicit none
         real(8), intent(in) :: a
         integer :: i
@@ -19,21 +18,20 @@ contains
         do i = 1, 100, 1
             term = ((-1.0_8)**(i+1))*(a**i)/real(i, 8)
 
+            if (abs(term) <= eps*max(1.0_8, abs(S))) exit
+
             y = term - c 
-            
             temp = S + y
             c = (temp - S) - y
 
-            if ((temp == S) .or. (abs(term) <= eps)) exit
-
+            
             S = temp
             
         end do
 
-        write(*,*) S, i
-        expansaoTaylor = S
+        expansaoTaylorErro = term/S
 
-    end function expansaoTaylor
+    end function expansaoTaylorErro
 
 end program exerB
 
