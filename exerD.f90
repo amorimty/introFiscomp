@@ -2,8 +2,8 @@ program exerD
 
     implicit none
     
-    real(4) :: l = 5.4565
-    integer :: rows, FIXED_DIMENSION = 2, circleCount, squareCount
+    real(4) :: l = 2.244
+    integer :: i, rows, FIXED_DIMENSION = 2, circleCount, squareCount, count1 = 0, count2 = 0
     real(4), allocatable :: pontos(:, :)
 
 
@@ -13,18 +13,32 @@ program exerD
 
     call random_number(pontos)
 
-    pontos = pontos*(l + 0.5)
+    pontos = pontos*l - l/2
     
+    count2 = rows
+    do i = 1, size(pontos)/2
+        if ( ((pontos(i,1))**2 + (pontos(i,2))**2) <= (l/2)**2 ) then
+            count1 = count1 + 1
+        end if
+        ! if ( pontos(i,1) <= l .and. pontos(i,1) >= -l .and. pontos(i,2) <= l .and. pontos(i,2) >= -l) then
+        !     count2 = count2 + 1
+        ! end if
+    end do
 
-    circleCount = isInCircle(pontos, l)
-    squareCount = isInSquare(pontos, l)
+    ! circleCount = isInCircle(pontos, l)
+    ! squareCount = isInSquare(pontos, l)
 
 
     ! write(*,'(F4.3)') (real(circleCount)/real(squareCount))*4
 
     ! write(*,*) (real(circleCount)/real(squareCount))*4
 
-    print'(F0.4)', (real(circleCount)/real(squareCount))*4
+    ! print'(F0.4)', (real(circleCount)/real(squareCount))*4
+
+    write(*,*) count1, count2
+    print '(F0.4)', (real(count1)/real(count2))*4
+
+
 
 
 contains
