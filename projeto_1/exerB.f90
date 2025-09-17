@@ -11,14 +11,25 @@ program exerB
     integer :: iteracoes
 
     call expansaoTaylorErroSubroutine(0.1_8, erro, iteracoes)
-    write(*,*) 0.1_8, erro, iteracoes
+    write(*,*) 0.1_8, erro
     call expansaoTaylorErroSubroutine(0.2_8, erro, iteracoes)
-    write(*,*) 0.2_8, erro, iteracoes
+    write(*,*) 0.2_8, erro
     call expansaoTaylorErroSubroutine(0.3_8, erro, iteracoes)
-    write(*,*) 0.3_8, erro, iteracoes
+    write(*,*) 0.3_8, erro
     call expansaoTaylorErroSubroutine(0.4_8, erro, iteracoes)
-    write(*,*) 0.4_8, erro, iteracoes
-    write(*,*) "Como podemos observar, a precisão chega na casa dos 1E-016%, uma precisão muito boa para um método numérico de aproximacao por series. No entanto, o número de iterações para a convergencia tabem ha de ser levado em conta. Apesar de convergir rapido para 0,1 e 0,2, eh possivel identificar uma tendencia de aumento de iteracoes para convergir, detalhe que pode se tornar determinante em uma analise mais minuciosa da precisao em relacao ao tempo para convergencia."
+    write(*,*) 0.4_8, erro
+    write(*,'(A)') 'Como podemos observar, &
+    & a precisão chega na casa dos 1E-016%, uma &
+    & precisão muito boa para um método numérico & 
+    & de aproximacao por series.&
+    & No entanto, o número de iterações para a convergencia &
+    & tabem ha de ser levado em conta.&
+    & Apesar de convergir rapido para 0,1 e 0,2,& 
+    & eh possivel identificar uma tendencia de aumento & 
+    & de iteracoes para convergir, detalhe &
+    & que pode se tornar determinante em uma analise & 
+    & mais minuciosa da precisao em &
+    & relacao ao tempo para convergencia.' 
 
 
 
