@@ -7,17 +7,22 @@ program exerB
     ! write(*,*) 0.3_8, expansaoTaylorErro(0.3_8)
     ! write(*,*) 0.4_8, expansaoTaylorErro(0.4_8)
 
-    real(8) :: erro
+    real(8) :: erro_duplo
+    real(4) :: erro_simples
     integer :: iteracoes
 
-    call expansaoTaylorErroSubroutine(0.1_8, erro, iteracoes)
-    write(*,*) 0.1_8, erro
-    call expansaoTaylorErroSubroutine(0.2_8, erro, iteracoes)
-    write(*,*) 0.2_8, erro
-    call expansaoTaylorErroSubroutine(0.3_8, erro, iteracoes)
-    write(*,*) 0.3_8, erro
-    call expansaoTaylorErroSubroutine(0.4_8, erro, iteracoes)
-    write(*,*) 0.4_8, erro
+    call expansaoTaylorErroSubroutine(0.1_8, erro_duplo, iteracoes)
+    call expansaoTaylorErroSubroutineSimples(0.1_4, erro_simples, iteracoes)
+    write(*,*) 0.1_8, erro_simples, erro_duplo
+    call expansaoTaylorErroSubroutine(0.2_8, erro_duplo, iteracoes)
+    call expansaoTaylorErroSubroutineSimples(0.2_4, erro_simples, iteracoes)
+    write(*,*) 0.2_8, erro_simples, erro_duplo
+    call expansaoTaylorErroSubroutine(0.3_8, erro_duplo, iteracoes)
+    call expansaoTaylorErroSubroutineSimples(0.3_4, erro_simples, iteracoes)
+    write(*,*) 0.3_8, erro_simples, erro_duplo
+    call expansaoTaylorErroSubroutine(0.4_8, erro_duplo, iteracoes)
+    call expansaoTaylorErroSubroutineSimples(0.4_4, erro_simples, iteracoes)
+    write(*,*) 0.4_8, erro_simples, erro_duplo
     write(*,'(A)') 'Como podemos observar, &
     & a precisão chega na casa dos 1E-016%, uma &
     & precisão muito boa para um método numérico & 
@@ -29,25 +34,30 @@ program exerB
     & de iteracoes para convergir, detalhe &
     & que pode se tornar determinante em uma analise & 
     & mais minuciosa da precisao em &
-    & relacao ao tempo para convergencia.' 
+    & relacao ao tempo para convergencia. &
+    & Portanto, devido à boa precisão e baixo &
+    & numero de iterações para convergir em precisao&
+    & simples e dupla, sim, é um bom método de aproximação.' 
 
 
 
 contains
-    real(8) function expansaoTaylorErro(a)
+    subroutine expansaoTaylorErroSubroutineSimples(a, erro, iteracoes)
         implicit none
-        real(8), intent(in) :: a
+        real(4), intent(in) :: a
+        real(4), intent(out) :: erro
+        integer, intent(out) :: iteracoes
         integer :: i
-        real(8) :: S = 0.0_8, c = 0.0_8, term, y, temp, eps 
+        real(4) :: S = 0.0_4, c = 0.0_4, term, y, temp, eps 
 
-        eps = epsilon(1.0_8)
+        eps = epsilon(1.0_4)
 
 
         ! implementando a soma de kahan para reduzir a propagação de erro na série
         do i = 1, 100, 1
-            term = ((-1.0_8)**(i+1))*(a**i)/real(i, 8)
+            term = ((-1.0_4)**(i+1))*(a**i)/real(i, 4)
 
-            if (abs(term) <= eps*max(1.0_8, abs(S))) exit
+            if (abs(term) <= eps*max(1.0_4, abs(S))) exit
 
             y = term - c 
             temp = S + y
@@ -57,9 +67,10 @@ contains
             S = temp
             
         end do
-        expansaoTaylorErro = abs(term/S)
+        erro = abs(term/S)
+        iteracoes = i
 
-    end function expansaoTaylorErro
+    end subroutine expansaoTaylorErroSubroutineSimples
 
     subroutine expansaoTaylorErroSubroutine(a, erro, iteracoes)
         implicit none
