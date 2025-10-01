@@ -1,16 +1,17 @@
 program exer1
 
     implicit none
-    real(16) :: resultados(7), coef = (1 + (1/2)**2), d1, d2, d3
+    real(16) :: resultados(7), d1, d2, d3, x0
     real(16), allocatable :: h(:)
     integer :: n, i
 
-    d1 = 2*(1/2)/(1+(1/2)**2)
-    d2 = 2*(1-(1/2)**2)/(1+(1/2)**2)**2
-    d3 = 4*(1/2)*((1/2)**3 - 3)/(coef)**3
+    x0 = 0.5_16
+    d1 = 2.0_16*x0 / (1.0_16 + x0*x0)
+    d2 = 2.0_16*(1.0_16 - x0*x0) / (1.0_16 + x0*x0)**2
+    d3 = 4.0_16*x0*(x0**2 - 3.0_16) / (1.0_16 + x0*x0)**3
 
-    open(1, file='/home/a11795871/Documentos/introFiscomp/projeto_2/tab1_in.dat', status='old')
-    open(2, file='/home/a11795871/Documentos/introFiscomp/projeto_2/tab1_out.dat', status='replace')
+    open(1, file='tab1_in.dat', status='old')
+    open(2, file='tab1_out.dat', status='replace')
     
     
     
@@ -21,17 +22,16 @@ program exer1
 
     read(1,*) h
 
-    write(*,*) h
 
     do i = 1, n, 1
         resultados(1) = h(i)
-        resultados(3) = abs(derivadaFrente2(h(i), coef) - d1)
-        resultados(4) = abs(derivadaTras2(h(i), coef) - d1)
-        resultados(2) = abs(derivadaSimetrica3(h(i), coef) - d1)
-        resultados(5) = abs(derivadaSegundaSimetrica3(h(i), coef) - d2)
-        resultados(6) = abs(derivadaSegundaSimetrica5(h(i), coef) - d2)
-        resultados(7) = abs(derivadaTerceiraAntisimetrica5(h(i), coef) - d3)
-        write(2, *) resultados
+        resultados(2) = abs( derivadaSimetrica3 (x0, h(i)) - d1 )  
+        resultados(3) = abs( derivadaFrente2    (x0, h(i)) - d1 )  
+        resultados(4) = abs( derivadaTras2      (x0, h(i)) - d1 )  
+        resultados(5) = abs( derivadaSegunda3   (x0, h(i)) - d2 )  
+        resultados(6) = abs( derivadaSegunda5   (x0, h(i)) - d2 )  
+        resultados(7) = abs( derivadaTerceira5  (x0, h(i)) - d3 )  
+        write(2,*) resultados
     end do
 
     close(1)
@@ -39,77 +39,47 @@ program exer1
 
 contains
 
-    real(16) function derivadaFrente2(h, coef) 
-        real(16), intent(in) :: h, coef
-        real(16) :: derivada
+    real(16) function f(x)
+        real(16), intent(in) :: x
+        f = log( 1.0_16 + x*x )
+    end function f
 
 
-        derivada = (log(coef + h)-log(coef))/h
-        
-        derivadaFrente2 = derivada
-
+    real(16) function derivadaFrente2(x0,h)
+        real(16), intent(in) :: x0,h
+        derivadaFrente2 = ( f(x0+h) - f(x0) ) / h
     end function derivadaFrente2
 
-    real(16) function derivadaTras2(h, coef) 
-        real(16), intent(in) :: h, coef
-        real(16) :: derivada
-
-        derivada = (log(coef) - log(coef - h))/h
-        
-        derivadaTras2 = derivada
-
-
+    real(16) function derivadaTras2(x0,h)
+        real(16), intent(in) :: x0,h
+        derivadaTras2 = ( f(x0) - f(x0-h) ) / h
     end function derivadaTras2
 
-    real(16) function derivadaSimetrica3(h,coef) 
-        real(16), intent(in) :: h, coef
-        real(16) :: derivada
 
-        derivada = (log(coef + h) - log(coef - h))/(2*h)
-        
-        derivadaSimetrica3 = derivada
-
+    real(16) function derivadaSimetrica3(x0,h)
+        real(16), intent(in) :: x0,h
+        derivadaSimetrica3 = ( f(x0+h) - f(x0-h) ) / (2.0_16*h)
     end function derivadaSimetrica3
 
-    real(16) function derivadaSimetrica5(h,coef) 
-        real(16), intent(in) :: h, coef
-        real(16) :: derivada
-
-        derivada = (8*log(coef + h) - 8*log(coef - h) - log(coef + 2*h) + log(coef - 2*h))/(12*h)
-        
-        derivadaSimetrica5 = derivada
-
-    end function derivadaSimetrica5
-
-    real(16) function derivadaSegundaSimetrica3(h,coef) 
-        real(16), intent(in) :: h, coef
-        real(16) :: derivada
-
-        derivada = (log(coef + h) + log(coef - h) - 2*log(coef))/(h**2)
-        
-        derivadaSegundaSimetrica3 = derivada
-
-    end function derivadaSegundaSimetrica3
-
-    real(16) function derivadaSegundaSimetrica5(h,coef) 
-        real(16), intent(in) :: h, coef
-        real(16) :: derivada
-
-        derivada = (16*log(coef + h) + 16*log(coef - h) - 30*log(coef) - log(coef + 2*h)- log(coef - 2*h))/(12*(h**2))
-        
-        derivadaSegundaSimetrica5 = derivada
-
-    end function derivadaSegundaSimetrica5
+    real(16) function derivadaSegunda3(x0,h)
+        real(16), intent(in) :: x0,h
+        derivadaSegunda3 = ( f(x0+h) - 2.0_16*f(x0) + f(x0-h) ) / (h*h)
+    end function derivadaSegunda3
 
 
-    real(16) function derivadaTerceiraAntisimetrica5(h,coef) 
-        real(16), intent(in) :: h, coef
-        real(16) :: derivada
+    real(16) function derivadaSegunda5(x0,h)
+        real(16), intent(in) :: x0,h
+        derivadaSegunda5 = ( -f(x0+2*h) + 16.0_16*f(x0+h) - 30.0_16*f(x0) + 16.0_16*f(x0-h) - f(x0-2*h) ) &
+                        / (12.0_16*h*h)
+    end function derivadaSegunda5
 
-        derivada = (2*log(coef - h) - 2*log(coef + h) + log(coef + 2*h)- log(coef - 2*h))/(2*(h**3))
-        
-        derivadaTerceiraAntisimetrica5 = derivada
+    real(16) function derivadaTerceira5(x0,h)
+        real(16), intent(in) :: x0,h
+        derivadaTerceira5 = ( -f(x0-2*h) + 2.0_16*f(x0-h) - 2.0_16*f(x0+h) + f(x0+2*h) ) / (2.0_16*h**3)
+    end function derivadaTerceira5
 
-    end function derivadaTerceiraAntisimetrica5
+
+
+
 
 end program exer1
