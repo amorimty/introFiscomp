@@ -4,6 +4,12 @@ program exer1
     real(16) :: resultados(7), d1, d2, d3, x0
     real(16), allocatable :: h(:)
     integer :: n, i
+    real(16) :: best_val(6), best_h(6)
+    integer  :: best_idx(6), k
+
+    best_val = huge(0.0_16)
+    best_h   = 0.0_16
+    best_idx = -1
 
     x0 = 0.5_16
     d1 = 2.0_16*x0 / (1.0_16 + x0*x0)
@@ -32,7 +38,24 @@ program exer1
         resultados(6) = abs( derivadaSegunda5   (x0, h(i)) - d2 )  
         resultados(7) = abs( derivadaTerceira5  (x0, h(i)) - d3 )  
         write(2,*) resultados
+
+
+        do k = 2, 7
+            if (resultados(k) < best_val(k-1)) then
+                best_val(k-1) = resultados(k)
+                best_h  (k-1) = h(i)
+                best_idx(k-1) = i
+            end if
+        end do
     end do
+
+    write(*,*) 'Melhor h por coluna de acordo com menor erro absoluto:'
+    write(*,'(A,ES24.12)') '  Coluna 2 (d1 simétrica 3p): ', best_h(1)
+    write(*,'(A,ES24.12)') '  Coluna 3 (d1 frente 2p):   ', best_h(2)
+    write(*,'(A,ES24.12)') '  Coluna 4 (d1 trás 2p):     ', best_h(3)
+    write(*,'(A,ES24.12)') '  Coluna 5 (d2 simétrica 3p):', best_h(4)
+    write(*,'(A,ES24.12)') '  Coluna 6 (d2 simétrica 5p):', best_h(5)
+    write(*,'(A,ES24.12)') '  Coluna 7 (d3 anti-sim 5p): ', best_h(6)
 
     close(1)
     close(2)

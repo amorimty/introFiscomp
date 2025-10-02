@@ -41,10 +41,10 @@ program exer3
     CALL secante(f, 2.8_16, 3.2_16, k, b3)
 
 
-    write(1,'(A)') "iter               dir1            dir2            dir3            NR1             NR2             NR3             sec1            sec2            sec3"
+    write(1,'(A)') "iter               dir1                  dir2                   dir3                 NR1                   NR2             NR3             sec1                      sec2                   sec3"
 
     do i = 1, k
-    write(1,'(I4,3X,9(ES20.10))') i, r1(i), r2(i), r3(i), a1(i), a2(i), a3(i), b1(i), b2(i), b3(i)
+    write(1,'(I4,3X,9(1PE22.10))') i, r1(i), r2(i), r3(i), a1(i), a2(i), a3(i), b1(i), b2(i), b3(i)
     end do
 
     close(1)
@@ -99,13 +99,13 @@ contains
             if (denom == 0.0_16) then
                 ! evita divisão por zero
                 raiz(j) = x_curr
-                exit
+                ! exit
+            else
+                x_next = x_curr - func(x_curr) * (x_curr - x_prev) / denom
+                x_prev = x_curr
+                x_curr = x_next
+                raiz(j) = x_curr
             end if
-
-            x_next = x_curr - func(x_curr) * (x_curr - x_prev) / denom
-            x_prev = x_curr
-            x_curr = x_next
-            raiz(j) = x_curr
         end do
     end subroutine secante
 
