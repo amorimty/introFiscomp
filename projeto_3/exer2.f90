@@ -18,7 +18,7 @@ program exer2
     
     open(1, file='output2.txt', status='replace')
 
-    write(1,*) x, y  
+    write(1,'(E26.16,1X,E26.16)') x, y  
 
 
     do
@@ -26,19 +26,18 @@ program exer2
         y_prev = y
         vy_prev = vy
 
-        ! passo de Euler
         x = x + vx*delta_t
         y = y + vy*delta_t
         vy = vy - g*delta_t
 
-        if (y < 0.0_16) exit   ! saiu do chão
-        write(1,*) x, y
+        if (y < 0.0_16) exit  
+        write(1,'(E26.16,1X,E26.16)') x, y
     end do
 
     frac = y_prev / (y_prev - y)
     x = x_prev + frac*(x - x_prev)
     y = 0.0_16
-    write(1,*) x, y
+    write(1,'(E26.16,1X,E26.16)') x, y
 
     close(1)
 

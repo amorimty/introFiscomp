@@ -16,7 +16,9 @@ program exer1
 
         v_curr = v_curr + delta_t*P/(m*v_curr)
 
-        write(1, *)  i*delta_t, v_curr
+        ! write(1, *)  i*delta_t, v_curr
+        write(1,'(F12.6,1X,E26.16)') i*delta_t, v_curr
+
     end do
     
     ! write(*,*) 1 + integer(tzao/delta_t)
