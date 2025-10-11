@@ -1,7 +1,7 @@
 program exer1
 
     implicit none
-    real(16) :: m = 80.0_16, P = 400.0_16, tzao, delta_t, v_curr
+    real(8) :: m = 80.0_8, P = 400.0_8, tzao, delta_t, v_curr
     integer :: i = 0
 
     read(*,*) tzao
