@@ -34,10 +34,11 @@ program exer2
         write(1,'(E26.16,1X,E26.16)') x, y
     end do
 
-    frac = y_prev / (y_prev - y)
-    x = x_prev + frac*(x - x_prev)
-    y = 0.0_8
-    write(1,'(E26.16,1X,E26.16)') x, y
+    ! intepolacao para mostrar o ponto onde y é 0
+    ! frac = y_prev / (y_prev - y)
+    ! x = x_prev + frac*(x - x_prev)
+    ! y = 0.0_8
+    ! write(1,'(E26.16,1X,E26.16)') x, y
 
     close(1)
 
