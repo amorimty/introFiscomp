@@ -1,5 +1,9 @@
-module coords_module
+
+
+
+program exercicio
     implicit none
+
     type coords
         real(8) :: x
         real(8) :: y
@@ -7,29 +11,32 @@ module coords_module
         real(8) :: vx
         real(8) :: vy
         real(8) :: vz
-    end type coords    
+    end type coords  
 
-end module coords_module
-
-program exercicio
-    implicit none
     type (coords) :: trave_e, trave_d, traj
 
     ! passando a velocidade inicial de km por hora para metros por segundo
-    real(8) :: v = (100.0_8/3.6_8), omega = 39 , x_prev, y_prev, z_prev
+    real(8) :: v = (100.0_8/3.6_8), omega = 39 , x_prev, y_prev, z_prev, x, y ,z, frac
 
     ! parametros gamma
     real(8) :: a1 = 0.0039_8, a2 = 0.0058_8, vd = 35.0_8, delta = 5.0_8
 
     real(8) :: dt = 0.01_8, g = 9.8_8 , t = 0
     real(8) :: m = 1.0_8, param, theta, phi, gamma
-    integer :: i = 1
+    integer :: i = 1, isGol = 0
 
     open(unit=1, file='chute_out.dat', status='replace', action='write')
 
     ! definindo limites do travessao do gol de 6m
-    trave_e = cords(40.0_8, 10.0_8, 2.5_8)
-    trave_d = cords(40.0_8, 4.0_8, 2.5_8)
+    ! trave_e = cords(40.0_8, 10.0_8, 2.5_8)
+    trave_e%x = 40.0_8
+    trave_e%y = 10.0_8
+    trave_e%z = 2.5_8
+
+    ! trave_d = cords(40.0_8, 4.0_8, 2.5_8)
+    trave_d%x = 40.0_8
+    trave_d%y = 4.0_8
+    trave_d%z = 2.5_8
 
     ! definindo inicio da trajetoria da bola
 
@@ -69,9 +76,32 @@ program exercicio
         traj%vy = traj%vy - (gamma*v*traj%vy/m - param*omega*traj%vx/m)*dt
         traj%vz = traj%vz - (g + gamma*v*traj%vz/m)*dt
 
+        ! write(1,'(E26.16,1X,E26.16,1X,E26.16)') traj%x, traj%y, traj%z
+        write(1,'(E26.16,1X,E26.16,1X,E26.16)') traj%x, traj%y
+
         if ( traj%x >= 40.0_8 ) exit    
         t = t + i*dt
+
+        
     end do
+
+    ! intepolacao para mostrar o ponto onde y é 0
+    frac = (40.0_8 - x_prev) / (traj%x - x_prev)
+    y = y_prev + frac*(traj%y - y_prev)
+    z = z_prev + frac*(traj%z - z_prev) 
+    x = 40.0_8
+
+    ! TESTAR SE A BOLA BATE NO TRAVESSAO LEVANDO EM CONSIDERACAO O RAIO DA BOLA DE 11 CM
+    ! OU SE PASSA ENTRE AS TRAVES
+
+    if ( y >= (trave_d%y + 0.11_8) .and. y <= (trave_e%y - 0.11_8) .and. z <= (trave_e%z - 0.11_8) .and. z >= (0.0_8) ) then
+        isGol = 1
+        write(*,*) 'sim'
+    else
+        write(*,*) 'nao'
+    end if
+    
+    
 
 
     
