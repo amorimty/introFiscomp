@@ -41,9 +41,13 @@ program exercicio
     ! definindo inicio da trajetoria da bola
 
     ! theta e phi sao em radianos
-    read(*,*) param
-    read(*,*) theta
-    read(*,*) phi
+    ! read(*,*) param
+    ! read(*,*) theta
+    ! read(*,*) phi
+
+    param = 0.001
+    theta = 0.480
+    phi = 0.1745
 
     traj%x = 0
     traj%y = 0
