@@ -21,9 +21,8 @@ program exercicio
     ! parametros gamma
     real(8) :: a1 = 0.0039_8, a2 = 0.0058_8, vd = 35.0_8, delta = 5.0_8
 
-    real(8) :: dt = 0.01_8, g = 9.8_8 , t = 0
+    real(8) :: dt = 0.01_8, g = 9.8_8
     real(8) :: m = 1.0_8, param, theta, phi, gamma
-    integer :: i = 1, isGol = 0
 
     open(unit=1, file='chute_out.dat', status='replace', action='write')
 
@@ -59,6 +58,8 @@ program exercicio
     traj%vx = v*sin(theta)*cos(phi)
     traj%vy = v*sin(theta)*sin(phi)
     traj%vz = v*cos(theta)
+
+    write(1,'(E26.16,1X,E26.16)') traj%x, traj%y
     
     
     do 
@@ -80,34 +81,47 @@ program exercicio
         traj%vy = traj%vy - (gamma*v*traj%vy/m - param*omega*traj%vx/m)*dt
         traj%vz = traj%vz - (g + gamma*v*traj%vz/m)*dt
 
+        ! Barra a execução quando a bola bate no chao e anuncia que nao foi gol
+        if ( traj%z < 0.11_8  .and. traj%x < 40.0_8) then
+            write(*,*) 'nao'
+            exit
+        end if   
+
+        ! Se o x >= 40m ele para no if, interpola e computa o ultimo valor para a bola em x=40
+        if ( traj%x >= 40.0_8 ) then
+            ! intepolacao para mostrar o ponto onde y é 0
+            if (abs(traj%x - x_prev) > 1.0e-12_8) then
+                frac = (40.0_8 - x_prev) / (traj%x - x_prev)
+            else
+                frac = 0.0_8
+            end if
+
+            y = y_prev + frac*(traj%y - y_prev)
+            z = z_prev + frac*(traj%z - z_prev) 
+            x = 40.0_8
+
+            write(1,'(E26.16,1X,E26.16)') x, y
+
+            ! TESTAR SE A BOLA BATE NO TRAVESSAO LEVANDO EM CONSIDERACAO O RAIO DA BOLA DE 11 CM
+            ! OU SE PASSA ENTRE AS TRAVES
+
+            if ( y >= (trave_d%y + 0.11_8) .and. y <= (trave_e%y - 0.11_8) .and. z <= (trave_e%z - 0.11_8) .and. z >= (0.11_8) ) then
+                write(*,*) 'sim'
+            else
+                write(*,*) 'nao'
+            end if
+            exit
+        end if
+
         ! write(1,'(E26.16,1X,E26.16,1X,E26.16)') traj%x, traj%y, traj%z
-        write(1,'(E26.16,1X,E26.16,1X,E26.16)') traj%x, traj%y
+        write(1,'(E26.16,1X,E26.16)') traj%x, traj%y
 
-        if ( traj%x >= 40.0_8 ) exit    
-        t = t + i*dt
 
-        
+
+
     end do
 
-    ! intepolacao para mostrar o ponto onde y é 0
-    frac = (40.0_8 - x_prev) / (traj%x - x_prev)
-    y = y_prev + frac*(traj%y - y_prev)
-    z = z_prev + frac*(traj%z - z_prev) 
-    x = 40.0_8
-
-    ! TESTAR SE A BOLA BATE NO TRAVESSAO LEVANDO EM CONSIDERACAO O RAIO DA BOLA DE 11 CM
-    ! OU SE PASSA ENTRE AS TRAVES
-
-    if ( y >= (trave_d%y + 0.11_8) .and. y <= (trave_e%y - 0.11_8) .and. z <= (trave_e%z - 0.11_8) .and. z >= (0.0_8) ) then
-        isGol = 1
-        write(*,*) 'sim'
-    else
-        write(*,*) 'nao'
-    end if
-    
-    
-
-
+    close(1)
     
 end program exercicio
 
