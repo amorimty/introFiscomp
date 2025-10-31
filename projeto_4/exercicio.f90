@@ -40,13 +40,10 @@ program exercicio
     ! definindo inicio da trajetoria da bola
 
     ! theta e phi sao em radianos
-    ! read(*,*) param
-    ! read(*,*) theta
-    ! read(*,*) phi
+    read(*,*) param
+    read(*,*) theta
+    read(*,*) phi
 
-    param = 0.001
-    theta = 0.480
-    phi = 0.1745
 
     traj%x = 0
     traj%y = 0
@@ -60,6 +57,8 @@ program exercicio
     traj%vz = v*cos(theta)
 
     write(1,'(E26.16,1X,E26.16)') traj%x, traj%y
+    ! write(1,'(E26.16,1X,E26.16,1X,E26.16)') traj%x, traj%y, traj%z
+
     
     
     do 
@@ -84,6 +83,8 @@ program exercicio
         ! Barra a execução quando a bola bate no chao e anuncia que nao foi gol
         if ( traj%z < 0.11_8  .and. traj%x < 40.0_8) then
             write(*,*) 'nao'
+            write(*,'(E26.16,1X,E26.16,1X,E26.16)') traj%x, traj%y, traj%z
+
             exit
         end if   
 
@@ -107,17 +108,16 @@ program exercicio
 
             if ( y >= (trave_d%y + 0.11_8) .and. y <= (trave_e%y - 0.11_8) .and. z <= (trave_e%z - 0.11_8) .and. z >= (0.11_8) ) then
                 write(*,*) 'sim'
+                ! write(*,'(E26.16,1X,E26.16,1X,E26.16)') x, y, z
+
             else
                 write(*,*) 'nao'
+                ! write(*,'(E26.16,1X,E26.16,1X,E26.16)') x, y, z
             end if
             exit
         end if
-
         ! write(1,'(E26.16,1X,E26.16,1X,E26.16)') traj%x, traj%y, traj%z
         write(1,'(E26.16,1X,E26.16)') traj%x, traj%y
-
-
-
 
     end do
 
