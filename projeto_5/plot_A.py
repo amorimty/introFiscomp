@@ -15,7 +15,9 @@ def ler_dados(arquivo):
 
 
 # Nomes dos arquivos
-arquivos = ["projeto_5/map.dat"]
+arquivos = [
+    "/home/amorimty/Desktop/programming/introFiscomp/introFiscomp/projeto_5/map.dat"
+]
 
 # Nomes para legenda (você pode mudar aqui)
 nomes = ["x"]
@@ -25,6 +27,7 @@ trajetorias = [ler_dados(arquivo) for arquivo in arquivos]
 
 # Cores das trajetórias
 cores = ["red"]
+
 
 # Plotar
 plt.figure(figsize=(8, 6))
