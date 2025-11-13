@@ -1,0 +1,13 @@
+X1X - investigar a ocorrencia de pontos fixos, valores para x tal que g(x) = x para um dado r 
+X3X - dado que 0 <= r <= 4 determinar outra souçao valida para x tal que seja ponto fixo
+
+X2X - por que r tem que estar entre 0 e 4? 
+    R: porque se nao o xi+1 escapa do intervalo[0;1]
+
+
+4 - verificar o que acontece para valores iniciais proximos deos pontos fixos
+5 -  fazer esse grafico iniciando com x0 = 0.2 e testando para r=1, r=2
+    -> o valor de convergencia para r=1 e r=2 está de acordo com o topico 3?
+6 - repetir para r=3 e descrever o que está acontecendo
+
+
