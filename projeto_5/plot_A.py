@@ -16,7 +16,7 @@ def ler_dados(arquivo):
 
 # Nomes dos arquivos
 arquivos = [
-    "/home/amorimty/Desktop/programming/introFiscomp/introFiscomp/projeto_5/map.dat"
+    "/home/amorimty/Desktop/programming/introFiscomp/introFiscomp/projeto_5/map_linha.dat"
 ]
 
 # Nomes para legenda (você pode mudar aqui)

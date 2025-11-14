@@ -17,12 +17,12 @@ def ler_dados(arquivo):
 
 
 x, y = ler_dados(
-    r"D:/programação no windows/introFiscomp/introFiscomp/projeto_5/map_pontos.dat"
+    r"/home/amorimty/Desktop/programming/introFiscomp/introFiscomp/projeto_5/map_pontos.dat"
 )
 df1 = pd.DataFrame({"xi": x, "xi+1": y})
 
 z, h = ler_dados(
-    r"D:/programação no windows/introFiscomp/introFiscomp/projeto_5/map_linha.dat"
+    r"/home/amorimty/Desktop/programming/introFiscomp/introFiscomp/projeto_5/map_linha.dat"
 )
 df2 = pd.DataFrame({"xi": z, "xi+1": h})
 
@@ -31,21 +31,21 @@ trace1 = go.Scatter(
     x=df1["xi"],
     y=df1["xi+1"],
     mode="markers",
-    name="pontos",
+    # name="pontos",
     line=dict(color="#0f26f5"),
 )
 trace2 = go.Scatter(
     x=df2["xi"],
     y=df2["xi+1"],
     mode="lines",
-    name="linha",
     line=dict(color="#f5160f"),
+    name="linha",
 )
 
 layout = go.Layout(
-    title="Mapa Logístico",
-    xaxis=dict(title="xi"),
-    yaxis=dict(title="xi+1"),
+    title="Evolução temporal de x(i) no mapa logístico",
+    xaxis=dict(title="i"),
+    yaxis=dict(title="x(i)"),
     shapes=[
         {
             "type": "line",
@@ -57,7 +57,7 @@ layout = go.Layout(
         }
     ],
 )
-fig = go.Figure(layout=layout, data=[trace1, trace2])
+fig = go.Figure(layout=layout, data=[trace2, trace1])
 
 
 # df = pd.read_csv("projeto_5/map.dat", delimiter="\t", header=None)
@@ -65,6 +65,8 @@ fig = go.Figure(layout=layout, data=[trace1, trace2])
 
 # fig = px.scatter(x="xi", y="xi+1", data_frame=df, title="Mapa Logístico")
 
-# fig.write_image("projeto_5/mapa_logistico.svg")
+fig.write_image(
+    "/home/amorimty/Desktop/programming/introFiscomp/introFiscomp/projeto_5/mapa_logistico.svg"
+)
 
-fig.show()
+# fig.show()

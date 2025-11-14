@@ -1,0 +1,420 @@
+
+\documentclass[a4paper,12pt]{article}
+
+\usepackage[a4paper, left=3cm,top=3cm,right=2cm,bottom=2cm]{geometry}
+\usepackage[labelfont=bf]{caption}
+\usepackage{subcaption}
+\usepackage{multicol}
+\usepackage{svg}
+\setlength{\columnsep}{0.5cm}
+
+\usepackage{tikz}
+
+\usetikzlibrary{angles, quotes}
+\usepackage{pgfplots}
+\pgfplotsset{width=10cm,compat=1.9}
+\usepackage{amsmath}
+\usepackage{cmap}
+\usepackage{lmodern}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{indentfirst}
+\usepackage{float}
+\usepackage{nomencl}
+\usepackage{graphicx}
+\usepackage{comment}
+\usepackage{setspace}
+\usepackage[dvipsnames,svgnames,table]{xcolor}
+\usepackage[pdftex]{hyperref}
+\usepackage[a]{esvect}
+\usepackage{url}
+\usepackage{mdframed}
+\usepackage{gensymb}
+\usepackage{xcolor}
+\usepackage{amsmath}
+\usepackage{graphicx}
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=black,
+    urlcolor=blue,
+    citecolor=black,
+    pdfborder={0 0 0}, % Remove a moldura
+}
+\usepackage{amssymb}
+\usepackage{esint}
+\usepackage{tkz-euclide}
+\usepackage{listings}
+
+\usepackage{tocbibind}
+
+\usepackage[
+    backend=biber,
+    style=authortitle,
+  ]{biblatex}
+\usepackage{comment}
+\usepackage{multirow}
+
+\addbibresource{bibliografia.bib}
+
+\title{relatorio 1}
+
+\begin{document}
+\singlespacing
+\input{0_capa}
+
+\newpage
+\tableofcontents
+\setcounter{page}{1}
+
+\newpage
+
+% \section{Resumo}
+% \input{texts/1_resumo}
+
+\section{Introdução}
+No seguinte relatório tratamos de uma análise do comportamento da série temporal não linear caracterizada pela equação logística.
+\[
+  x_{i+1} = rx_i(1-x_i)
+  \]
+Neste analisamos os diversos comportamentos apresentados para os diferentes valores de parâmetros possíveis. Trabalharemos desde os valores do parâmetro $r$ para os quais x converge para valores fixos, até os valores de $r$ para os quais x apresenta comportamento caótico determinístico.
+
+\section{Resultados e Discussões}
+
+\subsection{Tarefa A - Tratamento Geral}
+
+\subsubsection{Investigação da ocorrência de pontos fixos}
+
+Para que um ponto seja fixo, ele precisa cumprir a seguinte condição:
+
+
+\[
+f(x) = x
+\]
+
+Dessa forma, manipulando a equação logística obtemos a seguinte relação para o ponto fixo:
+
+\[
+x = rx(1-x)
+\]
+
+\begin{equation}
+    \boxed{x = \frac{r-1}{r}}
+    \label{eq:relacao_ptofixo}
+\end{equation}
+
+\begin{figure}[H]
+    \centering
+    \includesvg[width=1 \linewidth]{images/r2,9.svg}
+    \caption{Evolução temporal de $x$ para \(x_0 = 0.1\) e \(r = 2.9\) com o ponto fixo em $x = 0.655$}
+    \label{fig:placeholder}
+\end{figure}
+
+\subsubsection{Quais são os limites de valores para r?}
+
+A resposta simples e rápida seria que, para um r maior que 4, x escaparia do intervalo [0,1], e, para r negativo, x se tornaria negativo, algo que não faz sentido dentro do contexto de crescimento populacional. No entanto, há ainda o seguinte argumento matemático:
+
+Para \(0 \leq x_i \leq 1\), derivamos a equação logística e a igualamos a zero a fim de obter seu valor máximo (dada sua natureza de parábola com concavidade para baixo).
+
+\[
+\frac{d}{dx}(x_i - x_i^2) = 1 - 2x_i = 0
+\]
+\[
+x_{max} = \frac{1}{2}
+\]
+Assim, 
+
+\[
+rx_{max}(1-x_{max}) \leq 1
+\]
+\[
+\frac{r}{4} \leq 1 \implies r \leq 4
+\]
+
+\subsubsection{Comportamento observado para pontos próximos aos fixos}
+
+Expandindo a equação logística em série de Taylor perto do ponto fixo obtém-se:
+\[
+f(x) = f(x^*) + f'(x^*)(x - x^*)
+\]
+
+\[
+f(x) - f(x^*) = f'(x^*)(x - x^*)
+\]
+Diremos que \(x = x^* + e\) e, portanto, a diferença \(x - x^* = e_n\) e \(f(x) - f(x^*) = e_{n+1}\), onde \(e_n\) representa a distância entre as órbitas. Assim,
+
+\[
+e_{n+1} = f'(x^*)e_n
+\]
+
+Logo, é possível identificar que quando \(|f'(x^*)| < 0\) a distância entre as órbitas diminui até convergir para zero no infinito e, portanto, \(x\) converge para \(x^*\).Podemos separar em casos mais específicos:
+
+Para \(0<r < 1\), \(|f'(x^*)| < 0\) é um atrator e \(x\) tenderá a zero.
+
+Para \( r>1\) substituimos o valor de \(x^* = \frac{1-r}{r}\) na derivada, obtendo
+
+\[
+f'(x^*) = 2 - r
+\]
+
+Assim, em \(1<r<2\), temos \(0<f'(x^*)<1\), atraindo \(x\) para \(x^*\).
+
+Já em \(2<r<3\), temos \(-1<f'(x^*)<0\), atraindo, também, \(x\) para \(x^*\).
+
+Por fim, com \(3<r<4\) obtemos \(|f'(x^*)| > 1\) e, portanto repulsa \(x\) de \(x^*\), afastando as orbitas.
+
+A seguir temos os exemplos para alguns atratores:
+
+\begin{figure}[H]
+    \centering
+    \includesvg[width=0.8 \linewidth]{images/x0_0,1_r_2_xinf_0,5.svg}
+    \caption{Mapa logístico atrativo para \(x_0 = 0.2\) e \(r = 2\) e \(x\) tendendo a \(0.5\)}
+    \label{fig:placeholder}
+\end{figure}
+
+ \begin{figure}[H]
+     \centering
+     \includesvg[width=0.8 \linewidth]{images/x0_0,2_r_1_xinf_0.svg}
+     \caption{Mapa logístico atrativo para \(x_0 = 0.2\) e \(r = 1\) e \(x\) tendendo a \(0\)}
+     \label{fig:placeholder}
+ \end{figure}
+
+
+ \begin{figure}[H]
+     \centering
+     \includesvg[width=0.8 \linewidth]{images/r3.svg}
+     \caption{Mapa logístico atrativo para \(x_0 = 0.2\), \(r = 3\) e \(x\) tendendo a \(0.66...\)}
+     \label{fig:placeholder}
+ \end{figure}
+
+
+Checando por meio da equação \eqref{eq:relacao_ptofixo} podemos ver que, de fato, convergem para os valores esperados de acordo com o r.
+
+
+Para r> 3 podemos observar momentos em que o x se estabiliza entre valores de maneira periódica e outros onde exibe comportamento caótico. A seguir constam alguns exemplos:
+
+
+\begin{figure}[H]
+    \centering
+    \includesvg[width=0.8 \linewidth]{images/0,1_3,8.svg}
+    \includesvg[width=0.8 \linewidth]{images/0,1_3,8ptos.svg}
+    \caption{Mapa logístico caótico para \(x_0 = 0.1\) e \(r = 3.8\)}
+    \label{fig:placeholder}
+\end{figure}
+ 
+\begin{figure}[H]
+    \centering
+    \includesvg[width=1 \linewidth]{images/x0_0,2_r_3,45.svg}
+    \caption{Mapa logístico periódico para \(x_0 = 0.1\) e \(r = 3.45\)}
+    \label{fig:placeholder}
+\end{figure}
+
+
+\subsection{Tarefa B - Rumo ao Caos}
+
+\subsubsection{Calculando os valores x1 e x2 para o comportamento oscilatório}
+Para calcular os valores de x1 e x2 quando o mapa logístico adquire comportamento oscilatório, basta resolver a aplicação dele em sí mesmo.
+
+\[
+  f(f(x)) = x
+  \]
+\[
+  r^2x(1-x)(1-rx+rx^2)=x
+  \]
+\[
+  x = \frac{(r+1)\pm \sqrt{(r-3)(r+1)}}{2r}
+  \]
+
+\subsubsection{Valores de duplicação de período e constante de Feigenbaum}
+\begin{table}[H]
+  \centering
+  \caption{Valores de $r$ nos quais ocorrem duplicações de período sucessivas.}
+  \begin{tabular}{c c c}
+    \hline
+    \textbf{Transição} & \textbf{Período} & \textbf{Valor de $r$} \\
+    \hline
+    $r_1$ & 1 $\to$ 2 & 2.0 \\
+    $r_2$ & 2 $\to$ 4 & 3.0 \\
+    $r_3$ & 4 $\to$ 8 & 3.4495 \\
+    $r_4$ & 8 $\to$ 16 & 3.5441 \\
+    $r_5$ & 16 $\to$ 32 & 3.5644 \\
+    $r_6$ & 32 $\to$ 64 & 3.5688 \\
+    $r_7$ & 64 $\to$ 128 & 3.5697 \\
+    $r_8$ & 128 $\to$ 256 & 3.5699 \\
+    $\vdots$ & $\vdots$ & $\vdots$ \\
+    \hline
+  \end{tabular}
+\end{table}
+
+Seguem algumas imagens para r's periódicos duplicados sucessivamente:
+
+\begin{figure}[H]
+    \centering
+    \includesvg[width=0.8 \linewidth]{images/r3,55.svg}
+    \caption{Mapa logístico periódico para \(x_0 = 0.1\) e \(r = 3.55\)}
+    \label{fig:placeholder}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includesvg[width=0.8 \linewidth]{images/r3,56.svg}
+    \caption{Mapa logístico periódico para \(x_0 = 0.1\) e \(r = 3.56\)}
+    \label{fig:placeholder}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includesvg[width=0.8 \linewidth]{images/r3,57.svg}
+    \caption{Mapa logístico periódico para \(x_0 = 0.1\) e \(r = 3.57\)}
+    \label{fig:placeholder}
+\end{figure}
+A partir dos valores obtidos, conseguimos os seguintes valores para a constante de Feigenbaum:
+
+\begin{table}[H]
+  \centering
+  \caption{Cálculo aproximado da constante de Feigenbaum $\delta$ usando duplicações de período.}
+  \begin{tabular}{c c c c}
+    \hline
+    $n$ & $r_{n-1}$ & $r_n$ & $\displaystyle \delta_n=\frac{r_n-r_{n-1}}{r_{n+1}-r_n}$ \\
+    \hline
+    2 & 2.0000 & 3.0000 & 2.224 \\
+    3 & 3.0000 & 3.4495 & 4.754 \\
+    4 & 3.4495 & 3.5441 & 4.661 \\
+    5 & 3.5441 & 3.5644 & 4.614 \\
+    6 & 3.5644 & 3.5688 & 4.889 \\
+    7 & 3.5688 & 3.5697 & 4.500 \\
+    \hline
+  \end{tabular}
+\end{table}
+
+Ignorando o valor 2.224 que não está em \(r>3\) e calculando a média e desvio padrão, obtemos o seguinte valor:
+
+\[
+  \bar\delta = 4.6836 \pm 0.2
+  \]
+
+Comparando com o valor da literatura \(\delta = 4.669201609...\), observa-se uma diferença na ordem de \(10^{-2}\) que é próxima mas difere devido às poucas casas decimais trabalhadas.
+
+A partir da média obtida para a constante de Feigenbaum, estimamos o valor de $r$ em que as duplicações de período tendem ao infinito (dando início ao caos) usando a seguinte derivação da relação da constante de Feigenbaum:
+
+\[
+\frac{r_n - r_{n-1}}{r_{n+1} - r_n}
+\]
+tende a um valor constante. Isso implica que
+\[
+r_{n+1} - r_n \approx \frac{1}{\delta}(r_n - r_{n-1})
+\]
+no qual os intervalos diminuem geometricamente com razão $1/\delta$. Consequentemente os valores $r_n$ aproximam-se de $r_\infty$ com
+\[
+r_\infty - r_n \propto \delta^{-n}
+\]
+Eliminando a constante de proporcionalidade e usando dois termos consecutivos, obtém-se a seguinte estimativa:
+
+\[
+r_\infty \approx r_n + (r_n - r_{n-1})\,\bar\delta
+\]
+Assim, utilizando os últimos valores da Tabela, \(r_7 = 3.5697\) e \(r_8 = 3.5699\), obtemos
+\[
+r_\infty \approx r_8 + (r_8 - r_7)\,\bar\delta 
+\]
+Obtemos a estimativa
+\[
+r_\infty \approx 3.571
+\]
+Novamente, difere do valor da literatura \(r_\infty = 3.569945672\ldots\).
+
+\subsection{Tarefa C: O Caos}
+Para calcular o expoente de Lyapunov analiticamente utilizamos a seguinte fórmula:
+
+\[
+\lambda = \lim_{N \to \infty} \frac{1}{N}\sum_{n=0}^{N-1}\ln\left| f'(x_n) \right|, \qquad 
+f(x) = r\,x(1-x)
+\]
+Na qual substituimos a derivada da função, obtendo a seguinte relação com $x_n$ e $r$
+
+\[
+f'(x) = r(1 - 2x), \qquad \lambda = \lim_{N \to \infty} \frac{1}{N} \sum_{n=0}^{N-1} \ln\left| r\,(1 - 2x_n) \right|
+\]
+
+\subsubsection{Para $0<r<1$}
+Para esse caso o ponto fixo é zero, logo a equação do expoente fica
+
+\[
+f'(0) = r(1 - 2\cdot 0)=r \implies \lambda =  \ln\left| r \right|
+\]
+Portanto, dado aqui o r se encontra entre 0 e 1, o expoente será negativo.
+\subsubsection{Para $1< r <3$}
+
+Utilizando a fórmula \eqref{eq:relacao_ptofixo} deduzida anteriormente para calcular $x^*$, podemos analisar o que acontece com o expoente de Lyapunov a partir da seguinte relação 
+
+\[
+\lambda(r) = \ln\!\left|\,2 - r\,\right|.
+\]
+
+Desse modo, a partir de $1 < r < 3$ temos
+
+\[
+  |2-r|<1 \implies \lambda < 0
+  \]
+
+
+
+\subsubsection{Para r>3}
+
+Aqui, o caos reina, mas há janelas de estabilidade para alguns r's. No caso do caos, $\lambda >0$, mas nas janelas de estabilidade ele volta a ter valor negativo.
+
+No código o expoente de Lyapunov foi calculado numéricamente de duas formas. A primeira foi por meio da fórmula previamente mencionada. A segunta foi calculando a inclinação da melhor reta encontrada (pelo método dos minimos quadrados) para a linearização dos primeiros pontos da distância $d$ entre as órbitas antes da saturação.
+
+A saturação nada mais é do que o momento em que a distância entre as órbitas para de crescer uma vez que estão limitadas ao intervalo de $[0,1]$. Quando a distância tenta ultrapassar a máxima $d_{max} = 1$ ela volta a cair e perde-se o comportamento exponencial. Há uma forma de tratar isso com renormalizações (algorítmo de Benettin) de acordo com o crescimento dos valores de $x$ de modo que o comportamento exponencial seja mantido.
+
+Os seguintes resultados foram obtidos numericamente para o expoente de Lyapunov:
+
+\begin{table}[H]
+  \centering
+  \caption{Expoente de Lyapunov para $x_0 = 0.1$ e $\varepsilon = 10^{-5}$,
+  com $n=1000$, $d_{\text{sat}}=0.15$.}
+  \begin{tabular}{c c c}
+    \hline
+    $r$ & $\lambda$ (fórmula) & $\lambda$ (mínimos quadrados) \\
+    \hline
+    2.5 & -0.693147 & -0.136196 \\
+    2.8 & -0.223144 & -0.413339 \\
+    2.9 & -0.105361 & -0.709234 \\
+    3.0 & -0.003605 & -0.004041 \\
+    3.6 & 0.181581 & 0.207888 \\
+    3.7 & 0.357093 & 0.303981 \\
+    3.8 & 0.443584 & 0.442924 \\
+    3.9 & 0.499339 & 0.526803 \\
+    \hline
+  \end{tabular}
+\end{table}
+
+A seguir estâo gráficos ilustrativos do comportamento exponencial da distância $d$ entre as órbitas para r caótico e sua normalização para $log(d)$:
+
+\begin{figure}[H]
+    \centering
+    \includesvg[width=1 \linewidth]{images/r3,67.svg}
+    \caption{Comportamento da distância das órbitas para \(x_0 = 0.1\), \(r = 3.67\) e \(\epsilon = 10^{-5}\)}
+    \label{fig:placeholder}
+\end{figure}
+ 
+\begin{figure}[H]
+    \centering
+    \includesvg[width=1 \linewidth]{images/linearizacao_r3,67.svg}
+    \caption{Linearização do gráfico de $d(i) \text{ vs } i$ com \(x_0 = 0.1\) e \(r = 3.67\) e \(\epsilon = 10^{-5}\)}
+    \label{fig:placeholder}
+\end{figure}
+
+
+\section{Conclusão}
+
+
+O estudo numérico do mapa logístico permitiu observar a transição entre regimes simples e caóticos. A análise dos pontos fixos, das duplicações de período e do expoente de Lyapunov mostrou que pequenas variações no parâmetro $r$ modificam drasticamente a evolução temporal de $x_i$. Os resultados reproduziram os comportamentos esperados: a estabilidade do ponto fixo para $r<3$, o surgimento de órbitas de período $2^n$ e a divergência exponencial para $\lambda>0$ na região caótica. Dessa forma, confirmamos a estrutura típica de sistemas não lineares unidimensionais e o papel do expoente de Lyapunov para quantificar a sensibilidade às condições iniciais.
+
+
+
+
+
+\printbibliography
+
+\end{document}
