@@ -56,8 +56,8 @@ program exerA
     lambdaMinimos = (count*sum_iy - sum_i*sum_y) / (count*sum_ii - sum_i*sum_i)
 
     lambda = s/real(n-ntemp,8)
-    write(*,*) 'Lyapunov Exponent Minimos Quadrados = ', lambdaMinimos
-    write(*,*) 'Lyapunov Exponent Formula = ', lambda
+    write(*,*) 'Expoente de Lyapunov Minimos Quadrados = ', lambdaMinimos
+    write(*,*) 'Expoente de Lyapunov Formula = ', lambda
 
     close(1)  
 
